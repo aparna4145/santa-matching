@@ -1,0 +1,863 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
+section {
+    display: grid;
+    place-content: center;
+    min-height: 0vh;
+    background: linear-gradient(#00144bea, #000000cb);
+    margin: 0;
+}
+
+
+
+.snow-man {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed; /* Position relative to the ground */
+    bottom: 10px; /* Keep it grounded */
+    left: 41.5%; /* Center horizontally */
+    transform: translateX(-50%); /* Center alignment */
+    transform-origin: bottom center; /* Pivot at the base */
+    animation: snowman-swing 5s ease-in-out infinite; /* Swing animation */
+}
+
+
+@keyframes snowman-swing {
+    0% {
+        transform: rotate(0deg); /* Neutral position */
+    }
+    25% {
+        transform: rotate(4deg); /* Swing slightly to the right */
+    }
+    50% {
+        transform: rotate(0deg); /* Back to neutral */
+    }
+    75% {
+        transform: rotate(4deg); /* Swing slightly to the left */
+    }
+    100% {
+        transform: rotate(0deg); /* Back to neutral */
+    }
+}
+
+
+.speech-bubble {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 8px;
+    background: black;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-size: 14px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+}
+
+.snow-man:hover .speech-bubble {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px); /* Add a slight movement effect */
+}
+
+.snow-man .hat {
+    width: 65px;
+    height: 80px;
+    background-color: #363636;
+    box-shadow: inset --1rem 0 0.75rem #111,
+        0 -0.2rem 0.2rem -0.1rem #fffa;
+    border-radius: 0.5rem 0.5rem 0 0;
+    transform-origin: bottom;
+    transform: translateY(0.5rem);
+    position: relative;
+    z-index: 1;
+}
+
+.snow-man .hat::before {
+    content: "";
+    background-color: #ff6a6a;
+    box-shadow: inset -1rem 0 0.75rem #1119;
+    top: 2.5rem;
+    height: 1rem;
+    width: 100%;
+    position: absolute;
+}
+
+.snow-man .hat::after {
+    content: "";
+    background-color: #363636;
+    box-shadow: inset -1rem 0 0.75rem #111,
+        0 -0.2rem 0.2rem -0.1rem #fffa;
+    bottom: -0.5rem;
+    width: 180%;
+    height: 0.75rem;
+    left: -40%;
+    position: absolute;
+    border-radius: 0.5rem;
+}
+
+
+.snow-man .head{
+    --cut-point: 88px;
+    position: relative;
+    width: 115px;
+    height: 123px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: inset -1rem 0 2rem #0007;
+    clip-path: polygon (0% 0%,
+             100% 0%,
+             100% var(--cut-point),
+             0% var(--cut-point), );
+}
+
+.snow-man .head::before,
+.snow-man .head::after {
+    --pos-x: 1.8rem;
+    content: "";
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: #242424;
+    position: absolute;
+    top: 2.75rem;
+    border-radius: 50%;
+    animation: blink 3s infinite;
+}
+@keyframes blink {
+    0%, 90%,100% {
+        height: 13px;
+    }
+    95% {
+        height: 2px;
+    }
+}
+
+.snow-man .head::before {
+    left: var(--pos-x);
+}
+
+.snow-man .head::after {
+    right: var(--pos-x);
+}
+
+/* Add nose */
+.snow-man .nose {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 14px 8px 0;
+    border-color: transparent orange transparent transparent;
+    position: absolute;
+    top: 4rem;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(30deg);
+}
+
+.smile {
+    position: absolute;
+    bottom: 10px;
+    width: 55px;
+    height: 21px;
+    border: 2px solid black;
+    border-color: transparent transparent black transparent;
+    border-radius: 100%;
+    top: 3.8rem;
+    left: 28.5%;
+}
+
+.snow-man:hover .smile {
+    border-color: transparent transparent red transparent;
+}
+
+.snow-man .scarp {
+    width: 128px;
+    height: 1.25rem;
+    background-color: #ff6a6a;
+    border-radius: 1rem;
+    position: absolute;
+    top: 169px;
+    z-index: 2;
+    box-shadow: inset -1rem 0 1rem #0007,
+        0 0 0.5rem #fff8;
+}
+
+.snow-man .body {
+    --cut-point: 20px;
+    position: relative;
+    width: 190px;
+    height: 160px;
+    background-color: white;
+    border-radius: 50%;
+    clip-path: polygon(0% var(--cut-point),
+             100% var(--cut-point),
+             100% 100%,
+             0% 100%);
+    transform: translateY(-36px);
+    box-shadow: inset -2rem 0 3rem #0007;
+}
+
+.snow-man .body::before,
+.snow-man .body::after {
+    content: "";
+    position: absolute;
+    left: 95px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #000;
+    box-shadow: 0 30px 0 #000;
+}
+
+.snow-man .body::before{
+    top: 50px;
+}
+
+.snow-man .body::after {
+    top: 110px;
+}
+
+/* Add arms */
+.snow-man .arm {
+    position: absolute;
+    width: 120px;
+    height: 2px;
+    background-color: #5a3227;
+    top: 60%;
+    transform-origin: left;
+}
+
+.snow-man .left.arm {
+    left: 60px;
+    transform: rotate(130deg);
+}
+
+.snow-man .right.arm {
+    right: -60px;
+    transform: rotate(30deg);
+}
+.snow-man:hover .left.arm {
+    animation: wave 1s ease-in-out infinite;
+}
+
+.snow-man:hover .right.arm {
+    animation: wave 1s ease-in-out infinite alternate;
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(45deg); }
+    50% { transform: rotate(30deg); }
+}
+
+/* Add fingers */
+.snow-man .arm::before,
+.snow-man .arm::after {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 2px;
+    background-color: #5a3227;
+}
+
+.snow-man .arm::before {
+    top: -8px;
+    left: 80px;
+    transform: rotate(-20deg);
+}
+
+.snow-man .arm::after {
+    top: 8px;
+    left: 80px;
+    transform: rotate(20deg);
+}
+
+
+
+
+.snow-man::after{
+    position: absolute;
+    content: "";
+    top: calc(100% - 2.5rem);
+    width: 100vw;
+    height: 20vh;
+    background-color: white;
+    box-shadow: 0 -0rem 0.75rem 1rem white;
+}
+
+
+
+ /* Santa styling */
+ .santa {
+    position: absolute;
+    top: 50px;
+    left: -300px; /* Start outside the screen */
+    width: 300px;
+    animation: santa-fly 8s linear infinite;
+   /* z-index: 5;*/
+}
+
+@keyframes santa-fly {
+    0% {
+        left: 100vw; /* Start off-screen on the right */
+        transform: translateX(0) translateY(0);
+    }
+    25% {
+        transform: translateX(-100px) translateY(-50px); /* Move slightly up */
+    }
+    50% {
+        transform: translateX(-200px) translateY(50px); /* Move slightly down */
+    }
+    75% {
+        transform: translateX(-300px) translateY(-50px); /* Move slightly up again */
+    }
+    100% {
+        left: -300px; /* End off-screen on the left */
+        transform: translateX(0) translateY(0);
+    }
+}
+
+
+.snow-layer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 4000%;
+    height: 250px;
+    background: white;
+    border-top-left-radius: 80%;
+    border-top-right-radius: 50%;
+    box-shadow: 0 -5px 15px rgba(255, 255, 255, 0.8);
+}
+
+.layer-1 {
+    height: 300px; /* Default height for the first layer */
+    background: white;
+    /*z-index: 1; /* Ensure it's behind the second layer */
+    opacity: 1; /* Slightly transparent for depth effect */
+}
+
+.layer-2 {
+    height: 320px; /* Slightly smaller to create a stacking effect */
+    bottom: 10px; /* Positioned slightly above the first layer */
+    background: #f9f9f9; /* A slightly different shade of white */
+    width: 7000px;
+    left: 500px;
+   /* z-index: 2; /* Ensure it's above the first layer */
+    opacity: 0.85; /* Slightly more transparent */
+}
+
+.layer-3 {
+    height: 190px; /* Slightly smaller to create a stacking effect */
+    bottom: 10px; /* Positioned slightly above the first layer */
+    background: #f9f9f9eb; /* A slightly different shade of white */
+    width: 1400px;
+    left: -500px;
+   /* z-index: 2; /* Ensure it's above the first layer */
+    opacity: 0.8; /* Slightly more transparent */
+}
+
+/**? Snow fall effect animation */
+
+.snowfall {
+    position: relative;
+    z-index: 3;
+}
+
+.snowfall span {
+    width: var(--size);
+    height: var(--size);
+    opacity: var(--opacity);
+    border-radius: 50%;
+    top: 0;
+    position: absolute;
+    left: var(--pos);
+    background-image: radial-gradient(white 25%, transparent 80%);
+    animation: snow-fall var(--duration) linear infinite;
+    animation-delay: var(--delay);
+    z-index: 3;
+    transform: translateY(-2rem);
+}
+
+@keyframes snow-fall {
+  from{
+        transform: translateY(-2rem);
+    }
+
+    to {
+        transform: translateY(93vh);
+    }
+}
+
+
+.tree {
+    position: relative;
+    bottom: -50px;
+    left: 380px; /* Move tree closer to the snowman */
+    height: 590px; /* Make the tree larger */
+    width: 300px; /* Adjust width proportionally */
+    background: linear-gradient(to top, #533106, #048020, #098633, #2fd35d, #85d98a);
+    clip-path: polygon(
+        50% 0,
+        70% 15%,
+        55% 10%,
+        85% 40%,
+        60% 25%,
+        90% 60%,
+        65% 45%,
+        100% 87%,
+        57% 80%,
+        57% 100%,
+        43% 100%,
+        43% 80%,
+        0 87%,
+        35% 45%,
+        10% 60%,
+        40% 25%,
+        15% 40%,
+        45% 10%,
+        30% 15%
+    );
+    transform: rotateY(calc(21deg * var(--t))); /* Keep tree orientation neutral */
+    
+}
+
+
+
+/* Tree trunk */
+.tree-trunk {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px; /* Increase trunk width */
+    height: 119px; /* Increase trunk height */
+    background-color: #533106;
+    z-index: 1;
+}
+
+/* Ornaments: vibrant colors in sets of three */
+.ornament {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    animation: twinkle 5s infinite alternate;
+}
+
+
+/* Optional: Add animation for ornaments */
+@keyframes ornamentGlow {
+    0% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 255, 0, 0.785); }
+    50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(255, 255, 255, 0.975); }
+    100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+}
+
+.ornament {
+    animation: ornamentGlow 5s infinite ease-in-out;
+}
+
+
+.star {
+    position: relative;
+    top: 65px; /* Adjust to align with the tree's top */
+    left: 176.5%;
+    transform: translateX(-50%);
+    width: 45px;
+    height: 45px;
+    background-color: gold;
+    clip-path: polygon(
+        50% 0%, 
+        61% 35%, 
+        98% 35%, 
+        68% 57%, 
+        79% 91%, 
+        50% 70%, 
+        21% 91%, 
+        32% 57%, 
+        2% 35%, 
+        39% 35%
+    );
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    /*z-index: 3;*/
+
+
+}
+
+    
+
+@keyframes twinkle {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.8);
+        box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+        box-shadow: 0 0 12px rgba(255, 255, 0, 1);
+    }
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+        box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+    }
+}
+
+
+
+
+  
+
+/* Lights (glow effect) */
+.tree-light {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: yellow;
+    border-radius: 50%;
+    box-shadow: 0 0 8px yellow;
+    animation: twinkle 1.8s infinite alternate;
+}
+
+
+
+
+/*bells*/
+.bell-container {
+    position: relative;
+    display: flex;
+    gap: -10px;
+    justify-content: center;
+}
+
+.bell {
+    position: relative;
+    width: 23px;
+    height: 35px;
+    background-color: #f5c342;
+    border-radius: 50% 50% 0 0; /* Create the bell's top part */
+    left: 380px;
+    top: -527px;
+    
+}
+
+.bell::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 40px;
+    height: 12px;
+    background-color: #f5c342;
+    border-radius: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.bell .clapper {
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    width: 5px;
+    height: 10px;
+    background-color: #d5a91e;
+    border-radius: 5px;
+    transform: translateX(-50%);
+}
+
+.bell .ribbon {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    width: 5px;
+    height: 40px;
+    background-color: #bf1f1f;
+    transform: translateX(-50%);
+    border-radius: 5px;
+}
+
+.bell .ribbon::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    background-color: #bf1f1f;
+    border-radius: 50%;
+    transform: translateX(-50%);
+}
+
+/* Apply rotation to each bell */
+.bell:nth-child(1) {
+    transform: rotate(30deg); /* Rotate clockwise */
+}
+
+.bell:nth-child(2) {
+    transform: rotate(-30deg); 
+}
+
+
+
+/* Gift Box Wrapper */
+/* Adjust Gift Box Position */
+.gift-box {
+    position: relative; /* Position it under the tree */
+    bottom: 0; /* Align to the base of the scene */
+    left: 400px; /* Center it under the tree trunk */
+    width: 80px;
+    height: 80px;
+    animation: bounce 1.5s infinite, gift-glow 1s infinite;
+
+}
+
+
+/* Common styles for the gift boxes */
+.gift-box .box {
+    position: absolute;
+    bottom: 0;
+    width: 80px;
+    height: 60px;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    animation: bounce 1.5s infinite, gift-glow 1s infinite;
+
+}
+
+
+.gift-box .lid {
+    position: absolute;
+    top: 0;
+    width: 80px;
+    height: 20px;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.gift-box .ribbon-vertical {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 100%;
+    background: #fff;
+}
+
+.gift-box .ribbon-horizontal {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 10px;
+    background: #fff;
+}
+
+.gift-box .bow {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gift-box .bow-loop {
+    width: 15px;
+    height: 10px;
+    border-radius: 15px;
+    position: absolute;
+    background: #fff;
+}
+
+.gift-box .bow-loop.left {
+    transform: rotate(-45deg);
+    left: -12px;
+}
+
+.gift-box .bow-loop.right {
+    transform: rotate(45deg);
+    right: -12px;
+}
+
+.gift-box .bow-center {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 2;
+    background: #fff;
+}
+
+/* Gift Box 1 - Red Box with White Bow and Ribbon */
+.gift-box.red .box {
+    background: #ff6347; /* Box color */
+}
+.gift-box.red .lid {
+    background: #e53e3e; /* Lid color */
+}
+.gift-box.red .ribbon-vertical,
+.gift-box.red .ribbon-horizontal {
+    background: #fff; /* Ribbon color */
+}
+.gift-box.red .bow-loop,
+.gift-box.red .bow-center {
+    background: #fff; /* Bow color */
+}
+
+/* Gift Box 2 - Blue Box with Yellow Bow and Ribbon */
+.gift-box.blue .box {
+    background: #4682b4; /* Box color */
+}
+.gift-box.blue .lid {
+    background: #4169e1; /* Lid color */
+}
+.gift-box.blue .ribbon-vertical,
+.gift-box.blue .ribbon-horizontal {
+    background: #ffd700; /* Ribbon color */
+}
+.gift-box.blue .bow-loop,
+.gift-box.blue .bow-center {
+    background: #ffd700; /* Bow color */
+}
+
+/* Gift Box 3 - Green Box with Pink Bow and Ribbon */
+.gift-box.green .box {
+    background: #32cd32; /* Box color */
+}
+.gift-box.green .lid {
+    background: #228b22; /* Lid color */
+}
+.gift-box.green .ribbon-vertical,
+.gift-box.green .ribbon-horizontal {
+    background: #ff69b4; /* Ribbon color */
+}
+.gift-box.green .bow-loop,
+.gift-box.green .bow-center {
+    background: #ff69b4; /* Bow color */
+}
+
+/* Gift Box 4 - Yellow Box with Blue Bow and Ribbon */
+.gift-box.yellow .box {
+    background: #ffd700; /* Box color */
+}
+.gift-box.yellow .lid {
+    background: #ffc107; /* Lid color */
+}
+.gift-box.yellow .ribbon-vertical,
+.gift-box.yellow .ribbon-horizontal {
+    background: #e14154; /* Ribbon color */
+}
+.gift-box.yellow .bow-loop,
+.gift-box.yellow .bow-center {
+    background: #4169e1; /* Bow color */
+}
+
+
+
+/* Randomly position the gift boxes around the tree */
+.gift-box.red {
+    bottom: 65px;
+    left: 320px;
+}
+
+.gift-box.blue {
+    bottom: 179px;
+    left: 390px;
+}
+
+.gift-box.green {
+    bottom: 219px;
+    left: 370px;
+}
+
+.gift-box.yellow {
+    bottom: 290px;
+    left: 450px;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes gift-glow {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(255, 0, 0, 1);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+}
+
+#playMusic {
+    position: fixed; /* Keeps it fixed on the screen */
+    top: 10px; /* Place it closer to the top */
+    left: 10px; /* Place it closer to the left */
+    z-index: 100; /* Ensures it appears above other elements */
+    width: 15px; /* Width of the button */
+    height: 15px; /* Height of the button */
+    border: none; /* Removes border */
+    border-radius: 55%; /* Makes it a circle */
+    background-color: red; /* Background color */
+    color: green; /* Text/icon color */
+    font-size: 5px; /* Text/icon size */
+    font-weight: bold; /* Makes the text bold */
+    cursor: pointer; /* Adds a pointer on hover */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Adds a shadow */
+    transition: transform 0.2s, background-color 0.3s; /* Smooth animations */
+    animation: twinkle 1.8s infinite alternate;
+}
+
+/* Hover Effect */
+#playMusic:hover {
+    background-color: #c70039; /* Darker shade on hover */
+    transform: scale(1.1); /* Slightly enlarges the button */
+}
+
+/* Active Effect */
+#playMusic:active {
+    transform: scale(0.95); /* Shrinks slightly on click */
+}
+
+
+
+.fixed-button {
+    position: relative;
+    bottom: 600px;  
+    right: 600px;   
+    background-color: #4CAF50; 
+    color: white;
+    border: none;
+    padding: 15px 32px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 9999; 
+}*/
+
+.fixed-button:hover {
+    background-color: #45a049; 
+
+}

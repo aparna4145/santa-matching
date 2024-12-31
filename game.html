@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christmas Memory Match</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      /* Set the background image */
+      background: url('assets/background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    #game-area {
+      display: grid;
+      grid-template-columns: repeat(4, 100px);
+      gap: 10px;
+      margin: 20px;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .card .inner {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .card.flip .inner {
+      transform: rotateY(180deg);
+    }
+
+    .card .front,
+    .card .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+    }
+
+    .card .front {
+      background: #f04e30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      z-index: 2;
+    }
+
+    .card .back {
+      background: #fff;
+      transform: rotateY(180deg);
+      z-index: 1;
+    }
+
+    #scoreboard {
+      font-size: 18px;
+      color: #fff;
+      margin: 10px;
+    }
+
+    #controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    #timer {
+      font-size: 18px;
+      color: #fff;
+    }
+
+    button {
+      background: #f04e30;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #c03e26;
+    }
+
+    #winning-message {
+      display: none;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <h1>Christmas Memory Match</h1>
+  <div id="controls">
+    <div id="scoreboard">Attempts: 0</div>
+    <div id="timer">Time: 0s</div>
+    <button onclick="goHome()">Back to Home</button>
+  </div>
+  <div id="game-area"></div>
+  <div id="winning-message">
+    <h2>Congratulations!</h2>
+    <p id="final-score"></p>
+    <button onclick="startGame()">Play Again</button>
+  </div>
+  <script>
+    // Correct image paths (replace 'assets/card1.jpg' with actual file paths)
+    const images = [
+      "assets/card1.jpg", "assets/card1.jpg",
+      "assets/card2.jpg", "assets/card2.jpg",
+      "assets/card3.jpg", "assets/card3.jpg",
+      "assets/card4.jpg", "assets/card4.jpg"
+    ];
+
+    const gameArea = document.getElementById("game-area");
+    const scoreboard = document.getElementById("scoreboard");
+    const timerElement = document.getElementById("timer");
+    const winningMessage = document.getElementById("winning-message");
+    const finalScore = document.getElementById("final-score");
+
+    let cards = [];
+    let flippedCards = [];
+    let matches = 0;
+    let attempts = 0;
+    let time = 0;
+    let timer;
+    let gameStarted = false;
+
+    function createCards() {
+      gameArea.innerHTML = ""; // Clear previous cards
+      const shuffledImages = [...images].sort(() => 0.5 - Math.random()); // Shuffle the array
+
+      shuffledImages.forEach((image) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        card.innerHTML = `
+          <div class="inner">
+            <div class="front">?</div>
+            <div class="back"><img src="${image}" alt="card" width="100" height="100"></div>
+          </div>
+        `;
+        card.addEventListener("click", () => flipCard(card));
+        gameArea.appendChild(card);
+        cards.push(card);
+      });
+    }
+
+    function flipCard(card) {
+      if (!gameStarted) {
+        gameStarted = true;
+        startTimer();
+      }
+      if (flippedCards.length === 2 || card.classList.contains("flip")) return;
+
+      card.classList.add("flip");
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const [card1, card2] = flippedCards;
+      const isMatch = card1.querySelector(".back").innerHTML === card2.querySelector(".back").innerHTML;
+
+      attempts++;
+      scoreboard.textContent = `Attempts: ${attempts}`;
+
+      if (isMatch) {
+        matches++;
+        flippedCards = [];
+        if (matches === images.length / 2) { // Half of the total cards (as there are pairs)
+          endGame();
+        }
+      } else {
+        setTimeout(() => {
+          card1.classList.remove("flip");
+          card2.classList.remove("flip");
+          flippedCards = [];
+        }, 1000);
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        time++;
+        timerElement.textContent = `Time: ${time}s`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timer);
+    }
+
+    function endGame() {
+      stopTimer();
+      winningMessage.style.display = "block";
+      finalScore.innerHTML = `You won in <strong>${attempts} attempts</strong> and <strong>${time} seconds</strong>!`;
+    }
+
+    function startGame() {
+      winningMessage.style.display = "none";
+      attempts = 0;
+      matches = 0;
+      time = 0;
+      gameStarted = false;
+      scoreboard.textContent = `Attempts: 0`;
+      timerElement.textContent = `Time: 0s`;
+      createCards();
+    }
+
+    function goHome() {
+      window.location.href = "index.html"; // Replace with your home page URL
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
